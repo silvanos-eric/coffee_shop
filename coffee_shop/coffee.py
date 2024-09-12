@@ -1,5 +1,4 @@
-from order import Order
-from customer import Customer
+from . import Customer, Coffee, Order
 
 
 class Coffee:
