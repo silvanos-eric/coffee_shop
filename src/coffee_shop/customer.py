@@ -1,44 +1,61 @@
 from order import Order
+from coffee import Coffee
 
 
 class Customer:
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name: str):
+        """ Create a new Customer object. """
+        self._name = name
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Customer name."""
         return self._name
 
     @name.setter
-    def name(self, name):
-        if not (1 <= len(name) <= 15):
+    def name(self, name: str) -> None:
+        """Set customer name."""
+        if not 1 <= len(name) <= 15:
             raise ValueError(
-                'Customer name must be between 1 and 15 characters!')
-        else:
-            self._name = name
+                "Customer name must be between 1 and 15 characters!")
+        self._name = name
 
     def orders(self):
-        return [order for order in Order if order.customer == self]
+        """Get all orders associated with this customer."""
+        return [order for order in Order.all_orders if order.customer == self]
 
-    def coffees(self):
+    def get_coffees(self):
+        """
+        Get a list of distinct coffees this customer has ordered.
+        """
         return list({
             order.coffee
             for order in Order.all_orders if order.customer == self
         })
 
-    def create_order(self, coffee, price):
+    def place_order(self, coffee: Coffee, price: float) -> None:
+        """Create a new order for this customer for the given coffee."""
         Order(self, coffee, price)
 
     @staticmethod
-    def most_aficianado(coffee):
-        coffee_orders = (order for order in Order if order.coffee == coffee)
+    def most_aficianado(coffee: Coffee) -> str:
+        """
+        The customer who has spent the most money on the given coffee.
+        """
+        # Get all orders associated with this coffee
+        coffee_orders = [
+            order for order in Order.all_orders if order.coffee == coffee
+        ]
+
         if not coffee_orders:
             return 'None'
-        else:
-            customer_total_spent = {}
-            for order in coffee_orders:
-                customer_total_spent[
-                    order.customer] = customer_total_spent.get(
-                        order.customer, 0) + order.price
-            return max(customer_total_spent, key=customer_total_spent.get)
+
+        # Map customers to total amount spent on this coffee
+        customer_spending = {}
+        for order in coffee_orders:
+            customer_spending[order.customer] = customer_spending.get(
+                order.customer, 0) + order.price
+
+        # Return the customer who has spent the most
+        return max(customer_spending, key=customer_spending.get)
