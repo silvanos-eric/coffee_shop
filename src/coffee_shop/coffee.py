@@ -25,3 +25,10 @@ class Coffee:
             order.customer
             for order in Order.all_orders if order.coffee == self
         })
+
+    def num_orders(self):
+        return len(order for order in Order if order.coffee == self)
+
+    def average_price(self):
+        return sum(order.price for order in Order
+                   if order.coffee == self) / self.num_orders()

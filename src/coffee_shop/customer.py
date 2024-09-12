@@ -26,3 +26,19 @@ class Customer:
             order.coffee
             for order in Order.all_orders if order.customer == self
         })
+
+    def create_order(self, coffee, price):
+        Order(self, coffee, price)
+
+    @staticmethod
+    def most_aficianado(coffee):
+        coffee_orders = (order for order in Order if order.coffee == coffee)
+        if not coffee_orders:
+            return 'None'
+        else:
+            customer_total_spent = {}
+            for order in coffee_orders:
+                customer_total_spent[
+                    order.customer] = customer_total_spent.get(
+                        order.customer, 0) + order.price
+            return max(customer_total_spent, key=customer_total_spent.get)

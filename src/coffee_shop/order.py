@@ -9,6 +9,8 @@ class Order:
         self.customer = customer
         self.coffee = coffee
         self.price = price
+        # Add this order to the class-level all_orders list
+        Order.all_orders.append(self)
 
     @property
     def customer(self):
