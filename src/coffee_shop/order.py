@@ -3,9 +3,10 @@ from coffee import Coffee
 
 
 class Order:
+    all_orders = []
 
     def __init__(self, customer, coffee, price):
-        self.cutomer = customer
+        self.customer = customer
         self.coffee = coffee
         self.price = price
 

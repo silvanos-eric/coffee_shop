@@ -1,3 +1,6 @@
+from order import Order
+
+
 class Coffee:
 
     def __init__(self, name):
@@ -13,3 +16,12 @@ class Coffee:
             raise ValueError('Coffee name must be at least 3 characters long!')
         else:
             self._name = name
+
+    def orders(self):
+        return [order for order in Order.all_orders if order.coffee == self]
+
+    def customers(self):
+        return list({
+            order.customer
+            for order in Order.all_orders if order.coffee == self
+        })
